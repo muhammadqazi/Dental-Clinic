@@ -7,13 +7,14 @@ const passport = require('passport');
 const _connect_database = require('./config/db');
 
 const user = require('./routes/userRoute');
+const doc = require('./routes/doctorRoutes')
 
 const app = express();
 
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({ secret: 'anything' , resave: false, saveUninitialized: false}));
+app.use(session({ secret: 'anything', resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -22,6 +23,7 @@ _connect_database();
 
 
 app.use('/api/v1', user);
+app.use('/api/v1/', doc);
 
 
 

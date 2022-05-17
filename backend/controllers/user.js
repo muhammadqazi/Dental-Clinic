@@ -11,9 +11,6 @@ exports.createUser = catchAsyncErrors(async (req, res, next) => {
 
     const { name, email, password, role } = req.body;
 
-    // CREATE TABLE users (user_id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY, name VARCHAR(255) ,  password VARCHAR(255), email VARCHAR(255) ,  role VARCHAR(50) ,  _isauthenticated bool, _isverified bool)
-
-
     con.query('SELECT * from users where email = ?', [email], async function (err, result) {
         if (result.length == 0) {
             const encryptPass = await bcrypt.hash(password, 10);
@@ -68,8 +65,6 @@ exports.createUser = catchAsyncErrors(async (req, res, next) => {
 
 exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
     const { email } = req.body;
-
-    // CREATE TABLE OTP (otp_id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY, code INT ,  token VARCHAR(255),user_id int unsigned,FOREIGN KEY(user_id) REFERENCES users(user_id),created_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)
 
     con.query('SELECT * from users where email = ?', [email], async function (err, result) {
         if (result.length > 0) {
