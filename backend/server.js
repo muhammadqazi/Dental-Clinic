@@ -1,5 +1,8 @@
 require('dotenv').config()
 const express = require('express');
+const bodyParser = require("body-parser");
+var session = require('express-session')
+const passport = require('passport');
 
 const _connect_database = require('./config/db');
 
@@ -9,6 +12,11 @@ const app = express();
 
 
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(session({ secret: 'anything' , resave: false, saveUninitialized: false}));
+app.use(passport.initialize());
+app.use(passport.session());
+
 _connect_database();
 
 
