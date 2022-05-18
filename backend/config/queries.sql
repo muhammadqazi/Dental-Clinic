@@ -74,8 +74,11 @@ CREATE TABLE doctor (doc_id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,   
         total int,
         paymentPlan int NOT NULL DEFAULT 1,
         appointment_id int UNSIGNED,
+        client_id int UNSIGNED,
+
     
-        FOREIGN KEY (appointment_id) REFERENCES appointment (appointment_id)
+        FOREIGN KEY (appointment_id) REFERENCES appointment (appointment_id),
+        FOREIGN KEY (client_id) REFERENCES client (client_id)
     );
 
     
