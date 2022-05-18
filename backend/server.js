@@ -8,6 +8,7 @@ const _connect_database = require('./config/db');
 
 const user = require('./routes/userRoute');
 const doc = require('./routes/doctorRoutes')
+const spec = require('./routes/treatmentRoutes')
 
 const app = express();
 
@@ -24,6 +25,8 @@ _connect_database();
 
 app.use('/api/v1', user);
 app.use('/api/v1/', doc);
+app.use('/api/v1/', spec);
+
 
 
 

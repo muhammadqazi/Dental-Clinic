@@ -1,9 +1,7 @@
 require('dotenv').config()
+const bcrypt = require('bcryptjs');
 const _connect_database = require("../config/db");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
-const sendToken = require("../utils/jwtToken");
-const bcrypt = require('bcryptjs');
-const jwt = require("jsonwebtoken");
 
 var con = _connect_database();
 
@@ -119,6 +117,7 @@ exports.getAllDocs = catchAsyncErrors(async (req, res, next) => {
             let data = []
             for (var i = 0; i < result.length; i++) {
                 data.push({
+                    doc_id : result[i].doc_id,
                     name: result[i].doc_name,
                     address: result[i].doc_address,
                     telephone: result[i].doc_telephone,

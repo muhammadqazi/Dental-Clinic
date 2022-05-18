@@ -8,15 +8,26 @@ CREATE TABLE OTP (otp_id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY, code 
 
 CREATE TABLE doctor (doc_id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,       doc_name varchar(255) NOT NULL,doc_address varchar(255) NOT NULL,doc_telephone int NULL,);
 
-    CREATE TABLE specialization (
-        spec_id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
-        treatmentName varchar(255) NOT NULL,
-        doc_id int UNSIGNED,
+    -- CREATE TABLE specialization (
+    --     spec_id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    --     treatmentName varchar(255) NOT NULL,
+    --     doc_id int UNSIGNED,
             
-        FOREIGN KEY (treatmentName) REFERENCES treatment (treatmentName),
-        FOREIGN KEY (doc_id) REFERENCES doctor (doc_id)
+    --     FOREIGN KEY (treatmentName) REFERENCES treatment (treatmentName),
+    --     FOREIGN KEY (doc_id) REFERENCES doctor (doc_id)
         
-    );
+    -- );
+
+    CREATE TABLE treatment (
+	
+        treat_id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
+        treat_name varchar(255) NOT NULL,
+        treat_desc varchar(255) NOT NULL,
+        
+        doc_id INT UNSIGNED,
+        
+        FOREIGN KEY (doc_id) REFERENCES doctor (doc_id)
+);
 
 
     CREATE TABLE client (
@@ -44,25 +55,16 @@ CREATE TABLE doctor (doc_id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,   
         appointment_id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
         appointDate date NOT NULL,
         appointTime time NULL,
-        reminded boolean NOT NULL DEFAULT FALSE,
             
         client_id int UNSIGNED,
+        doc_id int UNSIGNED,
+        treat_id int UNSIGNED,
         
-        FOREIGN KEY (client_id) REFERENCES client (client_id)
+        FOREIGN KEY (client_id) REFERENCES client (client_id),
+        FOREIGN KEY (doc_id) REFERENCES doctor (doc_id),
+        FOREIGN KEY (treat_id) REFERENCES treatment (treat_id)
     );
 
-
-
-    CREATE TABLE appointmentDetails (
-
-        treatmentName varchar(255),
-        appointment_id int UNSIGNED,
-        TreatmentDetails varchar(255),
-    
-        FollowUp varchar(255) NULL,
-        FOREIGN KEY (treatmentName) REFERENCES treatment (treatmentName),
-        FOREIGN KEY (appointment_id) REFERENCES appointment (appointment_id)
-    );
 
 
     

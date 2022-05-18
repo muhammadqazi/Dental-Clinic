@@ -38,7 +38,8 @@ exports.createUser = catchAsyncErrors(async (req, res, next) => {
                             res.status(200).json({
                                 status: true,
                                 message: 'OTP has been sent to your email',
-                                token: token
+                                token: token,
+                                expires_in: 3600
                             });
                         } else {
                             res.status(400).json({
@@ -85,7 +86,8 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
                     res.status(200).json({
                         status: true,
                         message: 'OTP has been sent to your email',
-                        token: token
+                        token: token,
+                        expires_in: 3600
                     });
                 } else {
                     res.status(400).json({
@@ -125,7 +127,8 @@ exports.codeVerification = catchAsyncErrors(async (req, res, next) => {
                         res.status(200).json({
                             status: true,
                             message: 'OTP verified successfully',
-                            token: token
+                            token: token,
+                            expires_in: 3600
                         });
                     } else {
                         res.status(400).json({
@@ -183,12 +186,17 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 
             if (bcrypt.compareSync(password, result[0].password)) {
 
-                sendToken({
-                    name: result[0].name,
-                    email: result[0].email,
-                    role: result[0].role,
+                res.status(200).json({
+                    status: true,
+                    token: jwt.sign({ name: result[0].name, email: result[0].email, role: result[0].role, }, process.env.JWT_SECRET, { expiresIn: "1hr" }),
+                    expires_in: 3600
+                });
+                // sendToken({
+                //     name: result[0].name,
+                //     email: result[0].email,
+                //     role: result[0].role,
 
-                }, 200, res);
+                // }, 200, res);
 
             } else {
                 return res.status(400).json({
