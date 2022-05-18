@@ -10,6 +10,7 @@ const user = require('./routes/userRoute');
 const doc = require('./routes/doctorRoutes')
 const spec = require('./routes/treatmentRoutes')
 const client = require('./routes/clientRoutes')
+const appointment = require('./routes/appointmentRoutes')
 
 const app = express();
 
@@ -19,20 +20,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({ secret: 'anything', resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
-
-_connect_database();
-
+app.set('db' , _connect_database());
 
 
 app.use('/api/v1', user);
 app.use('/api/v1/', doc);
 app.use('/api/v1/', spec);
 app.use('/api/v1/', client);
-
-
-
-
-
+app.use('/api/v1/', appointment);
 
 
 

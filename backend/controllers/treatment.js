@@ -1,5 +1,4 @@
 require('dotenv').config()
-const bcrypt = require('bcryptjs');
 const _connect_database = require("../config/db");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 
@@ -8,7 +7,7 @@ var con = _connect_database();
 
 exports.createTreatment = catchAsyncErrors(async (req, res, next) => {
 
-    const { treatment_name, description, doc_id } = req.body;
+    const { treatment_name, description, doc_id, treat_price } = req.body;
 
     con.query('SELECT * FROM doctor where doc_id = ?', [doc_id], async function (err, result) {
 
@@ -32,7 +31,7 @@ exports.createTreatment = catchAsyncErrors(async (req, res, next) => {
 
                 } else {
 
-                    con.query('INSERT INTO treatment(treat_name,treat_desc,doc_id) VALUES (?,?,?)', [treatment_name, description, doc_id], function (err, doc) {
+                    con.query('INSERT INTO treatment(treat_name,treat_desc,doc_id,treat_price) VALUES (?,?,?,?)', [treatment_name, description, doc_id, treat_price], function (err, doc) {
                         if (err) throw err;
 
                         res.status(200).json({

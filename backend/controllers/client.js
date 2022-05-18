@@ -1,5 +1,4 @@
 require('dotenv').config()
-const bcrypt = require('bcryptjs');
 const _connect_database = require("../config/db");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 
@@ -12,7 +11,7 @@ exports.createClient = catchAsyncErrors(async (req, res, next) => {
     con.query('SELECT * from client where clientTelephone = ?', [telephone], async function (err, result) {
 
         if (result.length == 0) {
-
+            
             con.query('INSERT INTO client(firstName,lastName,dateOfBirth,clientAddress,clientTelephone) VALUES (?,?,?,?,?)', [fname, lname, dob, address, telephone], function (err, doc) {
                 if (err) throw err;
 

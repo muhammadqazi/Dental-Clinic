@@ -1,7 +1,6 @@
 require('dotenv').config()
 const _connect_database = require("../config/db");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
-const sendToken = require("../utils/jwtToken");
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 
