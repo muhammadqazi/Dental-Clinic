@@ -3,6 +3,7 @@ const con = require("../config/db");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
+const responseHanlder = require('../utils/responseHanlder');
 
 
 exports.createUser = catchAsyncErrors(async (req, res, next) => {
@@ -88,10 +89,8 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
                         expires_in: 3600
                     });
                 } else {
-                    res.status(400).json({
-                        status: true,
-                        message: 'Please wait, OTP has already been sent to your email',
-                    });
+
+                    responseHanlder(res, 400, false, 'Please wait, OTP has already been sent to your email');
                 }
             });
 
@@ -129,16 +128,12 @@ exports.codeVerification = catchAsyncErrors(async (req, res, next) => {
                             expires_in: 3600
                         });
                     } else {
-                        res.status(400).json({
-                            status: false,
-                            message: 'OTP is not valid',
-                        });
+
+                        responseHanlder(res, 400, false, 'Invalid OTP');
                     }
                 } else {
-                    res.status(400).json({
-                        status: false,
-                        message: 'OTP is not valid',
-                    });
+
+                    responseHanlder(res, 400, false, 'OTP is not valid');
                 }
             });
         }
@@ -160,10 +155,8 @@ exports.newPassword = catchAsyncErrors(async (req, res, next) => {
                 if (err) throw err;
             });
 
-            res.status(200).json({
-                status: true,
-                message: 'Password updated successfully',
-            });
+
+            responseHanlder(res, 200, true, 'Password updated successfully');
         }
     })
 })
@@ -197,10 +190,8 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
                 // }, 200, res);
 
             } else {
-                return res.status(400).json({
-                    status: false,
-                    message: 'Password is incorrect'
-                });
+
+                responseHanlder(res, 400, false, 'Invalid password');
             }
         }
     })
@@ -227,10 +218,8 @@ exports.getUserByEmail = catchAsyncErrors(async (req, res, next) => {
                     ]
             });
         } else {
-            res.status(400).json({
-                status: false,
-                message: 'User does not exist'
-            });
+
+            responseHanlder(res, 400, false, 'User does not exist');
         }
     })
 });
@@ -253,10 +242,8 @@ exports.getUserById = catchAsyncErrors(async (req, res, next) => {
                     ]
             });
         } else {
-            res.status(400).json({
-                status: false,
-                message: 'User does not exist'
-            });
+
+            responseHanlder(res, 400, false, 'User does not exist');
         }
     })
 });
@@ -272,16 +259,12 @@ exports.updateUser = catchAsyncErrors(async (req, res, next) => {
                 if (err) throw err;
             });
 
-            res.status(200).json({
-                status: true,
-                message: 'User updated successfully'
-            });
+
+            responseHanlder(res, 200, true, 'User updated successfully');
 
         } else {
-            res.status(400).json({
-                status: false,
-                message: 'User does not exist'
-            });
+
+            responseHanlder(res, 400, false, 'User does not exist');
         }
     });
 });
@@ -295,16 +278,12 @@ exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
                 if (err) throw err;
             });
 
-            res.status(200).json({
-                status: true,
-                message: 'User deleted successfully'
-            });
+
+            responseHanlder(res, 200, true, 'User deleted successfully');
 
         } else {
-            res.status(400).json({
-                status: false,
-                message: 'User does not exist'
-            });
+
+            responseHanlder(res, 400, false, 'User does not exist');
         }
     });
 });
@@ -324,17 +303,13 @@ exports.getAllUsers = catchAsyncErrors(async (req, res, next) => {
                     _isauthenticated: result[i]._isauthenticated
                 });
             }
-            res.status(200).json({
-                status: true,
-                data: data
-            });
+
+            responseHanlder(res, 200, true, undefined, data);
 
         } else {
 
-            res.status(400).json({
-                status: false,
-                message: 'No users found'
-            });
+
+            responseHanlder(res, 400, false, 'No user found');
         }
     });
 });
