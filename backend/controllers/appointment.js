@@ -1,10 +1,6 @@
 require('dotenv').config()
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
-const _connect_database = require("../config/db");
-
-
-var con = _connect_database();
-
+const con = require("../config/db");
 
 exports.createAppointment = catchAsyncErrors(async (req, res, next) => {
 
@@ -64,40 +60,18 @@ exports.updateAppointment = catchAsyncErrors(async (req, res, next) => {
                         message: 'Client has no appointment'
                     });
                 } else {
-                    var dateObj = new Date(appoint[0].appointDate);
-                    var month = dateObj.getUTCMonth() + 1;
-                    var day = dateObj.getUTCDate();
-                    var year = dateObj.getUTCFullYear();
 
-                    if (day < 10) {
-                        day = "0" + day;
-                    } else if (month < 10) {
-                        month = "0" + month;
-                    }
-                    newdate = year + "-" + month + "-" + day;
-                    console.log(newdate);
-                    console.log(req.params.date);
-                    if (newdate == req.params.date) {
-                        con.query('UPDATE appointment SET appointDate = ?, appointTime = ?, doc_id = ?, treat_id = ?, status = ? WHERE client_id = ?', [appointDate, appointTime, doc_id, treat_id, status, req.params.id], function (err, doc) {
-                            if (err) throw err;
+                    con.query('UPDATE appointment SET appointDate = ?, appointTime = ?, doc_id = ?, treat_id = ?, status = ? WHERE client_id = ?', [appointDate, appointTime, doc_id, treat_id, status, req.params.id], function (err, doc) {
+                        if (err) throw err;
 
-                            res.status(200).json({
-                                status: true,
-                                message: "Appointment updated successfully",
-                                appointmentId: req.params.id,
-                            });
+                        res.status(200).json({
+                            status: true,
+                            message: "Appointment updated successfully",
+                            appointmentId: req.params.id,
                         });
-                    } else {
-                        return res.status(400).json({
-                            status: false,
-                            message: 'Appointment date is not correct'
-                        });
-                    }
-
+                    });
                 }
             });
-
-
         }
     });
 
@@ -235,3 +209,9 @@ exports.listByTreatId = catchAsyncErrors(async (req, res, next) => {
         }
     });
 });
+
+
+exports.listByStatus = catchAsyncErrors(async (req, res, next) => {
+
+});
+

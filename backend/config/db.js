@@ -2,7 +2,7 @@ require('dotenv').config()
 var mysql = require('mysql');
 
 
-const _connect_database = () => {
+function connectDatabase() {
 
     var con = mysql.createConnection({
         host: process.env.DB_HOST,
@@ -21,4 +21,4 @@ const _connect_database = () => {
 }
 
 
-module.exports = _connect_database;
+module.exports = connectDatabase();

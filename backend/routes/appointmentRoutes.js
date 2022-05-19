@@ -1,10 +1,10 @@
 const express = require("express");
 const {
-    createAppointment, 
+    createAppointment,
     listByDocId,
     listByClientId,
     listByTreatId,
-    updateAppointment
+    updateAppointment,
 } = require("../controllers/appointment");
 
 
@@ -19,10 +19,10 @@ router.route("/appoint/new").post(isAuthenticatedUser, createAppointment);
 
 router.route("/appoint/byDoc/:id").get(isAuthenticatedUser, listByDocId);
 
-router.route("/appoint/byClient/:id").get(isAuthenticatedUser, listByClientId);
-
 router.route("/appoint/byTreat/:id").get(isAuthenticatedUser, listByTreatId);
 
-router.route("/appoint/:id/:date/:time").put(isAuthenticatedUser, updateAppointment);
-
+router.route("/appoint/:id")
+    .put(isAuthenticatedUser, updateAppointment)
+    .get(isAuthenticatedUser, listByClientId)
+    
 module.exports = router;

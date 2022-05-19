@@ -1,10 +1,9 @@
 require('dotenv').config()
-const _connect_database = require("../config/db");
+const con = require("../config/db");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 
-var con = _connect_database();
 
 exports.createUser = catchAsyncErrors(async (req, res, next) => {
 

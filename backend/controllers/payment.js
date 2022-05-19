@@ -1,9 +1,6 @@
 require('dotenv').config()
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
-const _connect_database = require("../config/db");
-
-
-var con = _connect_database();
+const con = require("../config/db");
 
 
 exports.createPayment = catchAsyncErrors(async (req, res, next) => {

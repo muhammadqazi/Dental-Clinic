@@ -1,9 +1,8 @@
 require('dotenv').config()
 const bcrypt = require('bcryptjs');
-const _connect_database = require("../config/db");
+const con = require("../config/db");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 
-var con = _connect_database();
 
 
 exports.createDoctor = catchAsyncErrors(async (req, res, next) => {
