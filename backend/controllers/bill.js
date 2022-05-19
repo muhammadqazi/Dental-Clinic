@@ -11,7 +11,6 @@ exports.createBill = catchAsyncErrors(async (req, res, next) => {
     const { billDate, total, paymentMethod, appointment_id, client_id } = req.body;
 
     con.query('SELECT * FROM appointment where appointment_id = ?;SELECT * FROM client where client_id = ?', [appointment_id, client_id], async function (err, result) {
-        console.log(result);
         if (result[0].length == 0) {
             return res.status(400).json({
                 status: false,
@@ -70,7 +69,6 @@ exports.updateBill = catchAsyncErrors(async (req, res, next) => {
     const { billDate, total, paymentMethod, appointment_id } = req.body;
 
     con.query('SELECT * FROM appointment where appointment_id = ?;SELECT * FROM client where client_id = ?', [appointment_id, req.params.id], async function (err, result) {
-        console.log(result);
         if (result[0].length == 0) {
             return res.status(400).json({
                 status: false,

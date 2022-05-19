@@ -101,7 +101,6 @@ exports.deleteClient = catchAsyncErrors(async (req, res, next) => {
 exports.getAllClients = catchAsyncErrors(async (req, res, next) => {
 
     con.query('SELECT * from client', function (err, result) {
-        console.log(result);
         if (result.length == 0) {
             return res.status(400).json({
                 status: false,

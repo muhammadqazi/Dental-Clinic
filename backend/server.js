@@ -12,6 +12,7 @@ const spec = require('./routes/treatmentRoutes')
 const client = require('./routes/clientRoutes')
 const appointment = require('./routes/appointmentRoutes')
 const bill = require('./routes/billRoutes')
+const payment = require('./routes/paymentRoutes')
 
 const app = express();
 
@@ -24,13 +25,13 @@ app.use(passport.session());
 app.set('db', _connect_database());
 
 
-app.use('/api/v1', user);
+app.use('/api/v1/', user);
 app.use('/api/v1/', doc);
 app.use('/api/v1/', spec);
 app.use('/api/v1/', client);
 app.use('/api/v1/', appointment);
 app.use('/api/v1/', bill);
-
+app.use('/api/v1/', payment);
 
 
 app.listen(process.env.PORT || 3000, () => { console.log(`Server is running on port ${process.env.PORT || 3000}`) });
