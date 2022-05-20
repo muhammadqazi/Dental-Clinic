@@ -15,42 +15,43 @@ exports.createUser = catchAsyncErrors(async (req, res, next) => {
             const encryptPass = await bcrypt.hash(password, 10);
 
             con.query('INSERT INTO users(name,email,password,role,_isauthenticated,_isverified) VALUES (?,?,?,?,?,?)', [name, email, encryptPass, role, false, false], function (err) {
-                if (err) throw err;
-            });
+                if (err) responseHanlder(res, 500, false, 'User creation failed')
+                else {
+                    con.query('SELECT * from users where email = ?', [email], async function (err, result) {
+                        if (result.length > 0) {
 
-            con.query('SELECT * from users where email = ?', [email], async function (err, result) {
-                if (result.length > 0) {
+                            con.query('SELECT * FROM OTP where user_id = ?', [result[0].user_id], async function (err, otp) {
+                                if (otp.length == 0) {
 
-                    con.query('SELECT * FROM OTP where user_id = ?', [result[0].user_id], async function (err, otp) {
-                        if (otp.length == 0) {
+                                    const code = Math.floor(100000 + Math.random() * 900000);
 
-                            const code = Math.floor(100000 + Math.random() * 900000);
-
-                            const token = jwt.sign({ name: result[0].name, email: result[0].email, role: result[0].role, }, process.env.JWT_SECRET, { expiresIn: "1hr" });
+                                    const token = jwt.sign({ name: result[0].name, email: result[0].email, role: result[0].role, }, process.env.JWT_SECRET, { expiresIn: "1hr" });
 
 
-                            con.query('INSERT INTO OTP(code,token,user_id,created_time) VALUES (?,?,?,?)', [code, token, result[0].user_id, new Date()], function (err, result) {
+                                    con.query('INSERT INTO OTP(code,token,user_id,created_time) VALUES (?,?,?,?)', [code, token, result[0].user_id, new Date()], function (err, result) {
 
-                                if (err) throw err;
+                                        if (err) throw err;
+                                    });
+
+                                    res.status(200).json({
+                                        status: true,
+                                        message: 'OTP has been sent to your email',
+                                        token: token,
+                                        expires_in: 3600
+                                    });
+                                } else {
+                                    res.status(400).json({
+                                        status: true,
+                                        message: 'Please wait, OTP has already been sent to your email',
+                                    });
+                                }
                             });
 
-                            res.status(200).json({
-                                status: true,
-                                message: 'OTP has been sent to your email',
-                                token: token,
-                                expires_in: 3600
-                            });
-                        } else {
-                            res.status(400).json({
-                                status: true,
-                                message: 'Please wait, OTP has already been sent to your email',
-                            });
                         }
                     });
-
                 }
             });
-
+            
         } else {
             return res.status(400).json({
                 status: false,
