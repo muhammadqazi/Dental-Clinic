@@ -1,5 +1,4 @@
-# CoCharger 
-CoCharger Hybrid mobile application.
+# DENTAL CLINIC 
 
 
 
