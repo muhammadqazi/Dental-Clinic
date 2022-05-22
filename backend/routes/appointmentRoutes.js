@@ -5,6 +5,7 @@ const {
     listByClientId,
     listByTreatId,
     updateAppointment,
+    listAllAppoint,
 } = require("../controllers/appointment");
 
 
@@ -16,6 +17,8 @@ const router = express.Router();
 
 
 router.route("/appoint/new").post(isAuthenticatedUser, createAppointment);
+
+router.route("/appoint/all").get(isAuthenticatedUser, listAllAppoint);
 
 router.route("/appoint/byDoc/:id").get(isAuthenticatedUser, listByDocId);
 

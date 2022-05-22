@@ -67,6 +67,46 @@ exports.updateAppointment = catchAsyncErrors(async (req, res, next) => {
 });
 
 
+exports.listAllAppoint = catchAsyncErrors(async (req, res, next) => {
+
+    let data = []
+    con.query('SELECT * FROM appointment', function (err, result) {
+
+        if (result.length == 0) {
+            responseHanlder(res, 400, false, 'No appointments found');
+        } else {
+            con.query('SELECT * FROM client where client_id = ?;SELECT * FROM doctor where doc_id = ?;SELECT * FROM treatment where treat_id = ?;', [result[0].client_id, result[0].doc_id, result[0].treat_id], function (err, final) {
+
+                // loop through appointments
+                for (let i = 0; i < result.length; i++) {
+
+                    data.push({
+                        appointment_id: result[i].appointment_id,
+                        appointDate: result[i].appointDate,
+                        appointTime: result[i].appointTime,
+                        status: result[i].status,
+                        client: final[0][0],
+                        doctor: {
+                            doc_id: final[1][0].doc_id,
+                            doc_name: final[1][0].doc_name,
+                            doc_address: final[1][0].doc_address,
+                            doc_telephone: final[1][0].doc_telephone
+                        },
+                        treatment: final[2][0]
+                    })
+
+                }
+
+                res.status(200).json({
+                    status: true,
+                    totalAppointments: result.length,
+                    appointments: data
+                });
+            });
+        }
+    });
+});
+
 exports.listByDocId = catchAsyncErrors(async (req, res, next) => {
 
     let data = [];
